@@ -8,11 +8,14 @@ import com.example.chapter_14_tasksapp.TaskDiffItemCallback
 import com.example.chapter_14_tasksapp.databinding.TaskItemBinding
 import com.example.chapter_14_tasksapp.model.Task
 
-class TaskItemAdapter(val clickListener: (taskId: Long) -> Unit) :
-    ListAdapter<Task, TaskItemAdapter.TaskItemViewHolder>(TaskDiffItemCallback()) {
+// TODO это вьюшка же, адаптер это часть отображения, поэтому лежит всегда в пакете view
+class TaskItemAdapter(
+    // TODO приватное
+    val clickListener: (taskId: Long) -> Unit
+) : ListAdapter<Task, TaskItemAdapter.TaskItemViewHolder>(TaskDiffItemCallback()) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int)
-            : TaskItemViewHolder = TaskItemViewHolder.inflateFrom(parent)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskItemViewHolder =
+        TaskItemViewHolder.inflateFrom(parent)
 
     override fun onBindViewHolder(holder: TaskItemViewHolder, position: Int) {
         val item = getItem(position)
@@ -20,7 +23,12 @@ class TaskItemAdapter(val clickListener: (taskId: Long) -> Unit) :
     }
 
 
-    class TaskItemViewHolder(var binding: TaskItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class TaskItemViewHolder(
+        var binding: TaskItemBinding
+    ) : RecyclerView.ViewHolder(binding.root) {
+
+        // TODO у котлина по кодстайлу companion должен быть в конце, но тут часто разные команды
+        //  договариваются по разному (https://kotlinlang.org/docs/coding-conventions.html#class-layout)
         companion object {
             fun inflateFrom(parent: ViewGroup): TaskItemViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
@@ -29,6 +37,7 @@ class TaskItemAdapter(val clickListener: (taskId: Long) -> Unit) :
             }
         }
 
+        // TODO дублирование `(taskId: Long) -> Unit`, лучше использовать typealias
         fun bind(item: Task, clickListener: (taskId: Long) -> Unit) {
             binding.taskName.text = item.taskName
             binding.taskDone.isChecked = item.taskDone

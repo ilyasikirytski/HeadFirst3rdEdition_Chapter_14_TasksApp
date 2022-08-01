@@ -14,6 +14,7 @@ import com.example.chapter_14_tasksapp.model.TaskDatabase
 import com.example.chapter_14_tasksapp.view_model.EditTaskViewModel
 import com.example.chapter_14_tasksapp.view_model.EditTaskViewModelFactory
 
+// TODO те же проблемы что и у TasksFragment
 class EditTaskFragment : Fragment() {
     private var _binding: FragmentEditTaskBinding? = null
     private val binding get() = _binding!!
@@ -48,6 +49,8 @@ class EditTaskFragment : Fragment() {
         })
 
         viewModel.navigateToList.observe(viewLifecycleOwner, Observer { navigate ->
+            // TODO никаких if во вьюшке, ей нужно просто сказать что сделать,
+            //  все ифы и проверки во вьюмодели
             if (navigate) {
                 view.findNavController().navigate(R.id.action_editTaskFragment_to_tasksFragment)
                 viewModel.onNavigatedToList()
