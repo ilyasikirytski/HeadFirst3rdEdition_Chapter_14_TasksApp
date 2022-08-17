@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.chapter_14_tasksapp.databinding.FragmentTasksBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
@@ -54,23 +53,26 @@ class TasksFragment : Fragment() {
 
         // TODO можно использовать ссылку на метод - val adapter = TaskItemAdapter(viewModel::onTaskClicked)
         val adapter = TaskItemAdapter { taskId ->
-            viewModel.onTaskClicked(taskId)
+            if (taskId != null) {
+                viewModel.onTaskClicked(taskId)
+            }
         }
 
         binding.tasksList.adapter = adapter
 
-        // TODO тут даже студия кричит - отформатируй код, и зачем тут let))) -
+        // TOD тут даже студия кричит - отформатируй код, и зачем тут let))) -
         //  viewModel.tasks.observe(viewLifecycleOwner) { adapter.submitList(it) }
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            it.let { adapter.submitList(it) }
+            adapter.submitList(it)
         })
 
         binding.saveButton.setOnClickListener {
             // TODO слишком много логики тут, должен просто вызвать
             //  viewModel.saveButtonClicked(newTaskName), дальше все на liveData/observable
-            viewModel.newTaskName = binding.taskName.text.toString()
+//            viewModel.newTaskName =
+//                if (binding.taskName.text.isEmpty()) "Default Name" else binding.taskName.text.toString()
+            viewModel.addTask(if (binding.taskName.text.isEmpty()) "Default Name" else binding.taskName.text.toString())
             binding.taskName.text = null
-            viewModel.addTask()
         }
 
         // TODO опять же, отформатируй код, и зачем тут снова let))) -
@@ -79,7 +81,7 @@ class TasksFragment : Fragment() {
             taskId?.let {
                 val action = TasksFragmentDirections.actionTasksFragmentToEditTaskFragment(taskId)
                 this.findNavController().navigate(action)
-                viewModel.onTaskNavigated()
+//                viewModel.onTaskNavigated()
             }
         }
         )

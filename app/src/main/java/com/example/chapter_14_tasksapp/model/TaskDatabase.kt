@@ -4,10 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.chapter_14_tasksapp.data.TaskEntity
 
 // TODO лучше форматировать через строчку, читать намного проще
 @Database(
-    entities = [Task::class],
+    entities = [TaskEntity::class],
     version = 1,
     exportSchema = false
 )

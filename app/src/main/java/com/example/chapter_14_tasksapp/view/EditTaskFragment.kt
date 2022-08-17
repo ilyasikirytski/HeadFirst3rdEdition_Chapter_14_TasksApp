@@ -5,10 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.chapter_14_tasksapp.R
+import com.example.chapter_14_tasksapp.data.TaskEntity
 import com.example.chapter_14_tasksapp.databinding.FragmentEditTaskBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
 import com.example.chapter_14_tasksapp.view_model.EditTaskViewModel
@@ -35,9 +37,9 @@ class EditTaskFragment : Fragment() {
         val viewModel = ViewModelProvider(this, viewModelFactory).get(EditTaskViewModel::class.java)
 
         binding.updateButton.setOnClickListener {
-            viewModel.task.value?.taskName = binding.taskName.text.toString()
-            viewModel.task.value?.taskDone = binding.taskDone.isChecked
-            viewModel.updateTask()
+//            viewModel.task.value?.taskName = binding.taskName.text.toString()
+//            viewModel.task.value?.taskDone = binding.taskDone.isChecked
+            viewModel.updateTask(TaskEntity(binding.taskName.text.toString(), taskId ,binding.taskDone.isChecked))
         }
         binding.deleteButton.setOnClickListener {
             viewModel.deleteTask()
