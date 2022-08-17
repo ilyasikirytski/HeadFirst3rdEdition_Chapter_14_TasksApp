@@ -5,11 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.findNavController
-import com.example.chapter_14_tasksapp.R
 import com.example.chapter_14_tasksapp.data.TaskEntity
 import com.example.chapter_14_tasksapp.databinding.FragmentEditTaskBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
@@ -39,10 +36,18 @@ class EditTaskFragment : Fragment() {
         binding.updateButton.setOnClickListener {
 //            viewModel.task.value?.taskName = binding.taskName.text.toString()
 //            viewModel.task.value?.taskDone = binding.taskDone.isChecked
-            viewModel.updateTask(TaskEntity(binding.taskName.text.toString(), taskId ,binding.taskDone.isChecked))
+            viewModel.updateTask(
+                TaskEntity(
+                    binding.taskName.text.toString(),
+                    taskId,
+                    binding.taskDone.isChecked
+                )
+            )
+            viewModel.navigateToList(view)
         }
         binding.deleteButton.setOnClickListener {
             viewModel.deleteTask()
+            viewModel.navigateToList(view)
         }
 
         viewModel.task.observe(viewLifecycleOwner, Observer {
@@ -50,13 +55,11 @@ class EditTaskFragment : Fragment() {
             it?.let { binding.taskDone.isChecked = it.taskDone }
         })
 
-        viewModel.navigateToList.observe(viewLifecycleOwner, Observer { navigate ->
-            // TODO никаких if во вьюшке, ей нужно просто сказать что сделать,
+        viewModel.navigateToList.observe(viewLifecycleOwner, Observer {
+            // TOD никаких if во вьюшке, ей нужно просто сказать что сделать,
             //  все ифы и проверки во вьюмодели
-            if (navigate) {
-                view.findNavController().navigate(R.id.action_editTaskFragment_to_tasksFragment)
-                viewModel.onNavigatedToList()
-            }
+            viewModel.onNavigatedToList()
+            viewModel.navigateToList(view)
         })
         return view
     }

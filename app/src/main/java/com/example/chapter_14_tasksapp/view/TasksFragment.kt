@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.findNavController
+import androidx.navigation.findNavController
 import com.example.chapter_14_tasksapp.databinding.FragmentTasksBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
 import com.example.chapter_14_tasksapp.view_model.TaskItemAdapter
@@ -77,14 +77,12 @@ class TasksFragment : Fragment() {
 
         // TODO опять же, отформатируй код, и зачем тут снова let))) -
         //  viewModel.tasks.observe(viewLifecycleOwner) { adapter.submitList(it) }
-        viewModel.navigateToTask.observe(viewLifecycleOwner, Observer { taskId ->
-            taskId?.let {
-                val action = TasksFragmentDirections.actionTasksFragmentToEditTaskFragment(taskId)
-                this.findNavController().navigate(action)
+        viewModel.navigateToTask.observe(viewLifecycleOwner, Observer {
+            val action = TasksFragmentDirections.actionTasksFragmentToEditTaskFragment(it)
+            view.findNavController().navigate(action)
 //                viewModel.onTaskNavigated()
-            }
-        }
-        )
+        })
+
         return view
     }
 

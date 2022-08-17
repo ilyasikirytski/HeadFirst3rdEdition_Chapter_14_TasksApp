@@ -6,12 +6,9 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.chapter_14_tasksapp.data.TaskEntity
 
-// TODO лучше форматировать через строчку, читать намного проще
-@Database(
-    entities = [TaskEntity::class],
-    version = 1,
-    exportSchema = false
-)
+// TOD лучше форматировать через строчку, читать намного проще
+@Database(entities = [TaskEntity::class], version = 1, exportSchema = false)
+
 abstract class TaskDatabase : RoomDatabase() {
 
     abstract val taskDao: TaskDao
