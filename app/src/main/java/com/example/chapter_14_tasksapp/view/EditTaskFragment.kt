@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
+import com.example.chapter_14_tasksapp.R
 import com.example.chapter_14_tasksapp.data.TaskEntity
 import com.example.chapter_14_tasksapp.databinding.FragmentEditTaskBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
@@ -43,11 +45,9 @@ class EditTaskFragment : Fragment() {
                     binding.taskDone.isChecked
                 )
             )
-            viewModel.navigateToList(view)
         }
         binding.deleteButton.setOnClickListener {
             viewModel.deleteTask()
-            viewModel.navigateToList(view)
         }
 
         viewModel.task.observe(viewLifecycleOwner, Observer {
@@ -58,8 +58,10 @@ class EditTaskFragment : Fragment() {
         viewModel.navigateToList.observe(viewLifecycleOwner, Observer {
             // TOD никаких if во вьюшке, ей нужно просто сказать что сделать,
             //  все ифы и проверки во вьюмодели
-            viewModel.onNavigatedToList()
-            viewModel.navigateToList(view)
+//            viewModel.onNavigatedToList() если включить этот метод то прилага крашится
+
+            view.findNavController().navigate(R.id.action_editTaskFragment_to_tasksFragment)
+//            viewModel.navigateToList(view)
         })
         return view
     }

@@ -39,7 +39,7 @@ class EditTaskViewModel(taskId: Long, val dao: TaskDao) : ViewModel() {
         navigateToList.value = false
     }
 
-    fun navigateToList(view: View) {
-        view.findNavController().navigate(R.id.action_editTaskFragment_to_tasksFragment)
-    }
+//    fun navigateToList(view: View) {
+//        view.findNavController().navigate(R.id.action_editTaskFragment_to_tasksFragment)
+//    }
 }
