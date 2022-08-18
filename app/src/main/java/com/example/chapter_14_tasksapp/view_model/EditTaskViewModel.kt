@@ -1,17 +1,19 @@
 package com.example.chapter_14_tasksapp.view_model
 
-import android.view.View
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.findNavController
-import com.example.chapter_14_tasksapp.R
 import com.example.chapter_14_tasksapp.data.TaskEntity
 import com.example.chapter_14_tasksapp.model.TaskDao
 import kotlinx.coroutines.launch
 
 
-class EditTaskViewModel(taskId: Long, val dao: TaskDao) : ViewModel() {
+class EditTaskViewModel(val dao: TaskDao) : ViewModel() {
 
+    var taskId = 0L
+
+    fun load(taskId: Long){
+        this.taskId = taskId
+    }
     // TODO  апочему получение из базы идет в основном потоке без корутин?
     var task = dao.getById(taskId)
 

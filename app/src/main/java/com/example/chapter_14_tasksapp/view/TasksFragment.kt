@@ -8,18 +8,19 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
+import by.kirich1409.viewbindingdelegate.viewBinding
+import com.example.chapter_14_tasksapp.R
 import com.example.chapter_14_tasksapp.databinding.FragmentTasksBinding
 import com.example.chapter_14_tasksapp.model.TaskDatabase
-import com.example.chapter_14_tasksapp.view_model.TaskItemAdapter
 import com.example.chapter_14_tasksapp.view_model.TaskViewModelFactory
 import com.example.chapter_14_tasksapp.view_model.TasksViewModel
 
-class TasksFragment : Fragment() {
+class TasksFragment : Fragment(R.layout.fragment_tasks) {
 
-    private var _binding: FragmentTasksBinding? = null
-    private val binding get() = _binding!!
+//    private var _binding: FragmentTasksBinding? = null
+//    private val binding get() = _binding!!
 
-    // TODO в котлине уже давно есть расширение viewModels, можно использовать
+    // TOD в котлине уже давно есть расширение viewModels, можно использовать
     private val factoryProducer = {
         TaskViewModelFactory(
             TaskDatabase.getInstance(requireContext().applicationContext)
@@ -27,67 +28,64 @@ class TasksFragment : Fragment() {
     }
     private val viewModel: TasksViewModel by viewModels(factoryProducer = factoryProducer)
 
-    // TODO вообще всю эту обработку (кроме двух строчек с байндингом) лучше делать в onViewCreated,
-    //  когда вьюшка уже создана
+    var adapter: TaskItemAdapter? = null
 
-    // TODO форматирование шапки метода не по кодстайлу котлина, каждый параметр с новой строки
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
+    private val viewBinding by viewBinding(FragmentTasksBinding::bind)
 
-        // TODO для байндинга тоже давно придумали делегаты, уже готовые даже есть чтобы
-        //  самому не писать с помощью kotlin delegated property - com.github.kirich1409:viewbindingpropertydelegate-noreflection
-        // Inflate the layout for this fragment
-        _binding = FragmentTasksBinding.inflate(inflater, container, false)
-        val view = binding.root
-
-        // TODO грубо говоря сам попытался сделать без DI все, поэтому все так страшно)))
-//        val application = requireNotNull(this.activity).application
-//        val dao = TaskDatabase.getInstance(application).taskDao
-//        val viewModelFactory = TaskViewModelFactory(dao)
-//        val viewModel = ViewModelProvider(this, viewModelFactory).get(TasksViewModel::class.java)
-
-        // TODO адаптер пересоздается каждый раз при создании вьюшки,
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // TOD адаптер пересоздается каждый раз при создании вьюшки,
         //  то есть нажал бек / перевернул экран и все, все слетело
 
-        // TODO можно использовать ссылку на метод - val adapter = TaskItemAdapter(viewModel::onTaskClicked)
-        val adapter = TaskItemAdapter { taskId ->
-            if (taskId != null) {
-                viewModel.onTaskClicked(taskId)
-            }
-        }
+        // TOD можно использовать ссылку на метод - val adapter = TaskItemAdapter(viewModel::onTaskClicked)
+        adapter = TaskItemAdapter(viewModel::onTaskClicked)
+    }
 
-        binding.tasksList.adapter = adapter
+//    override fun onCreateView(
+//        inflater: LayoutInflater,
+//        container: ViewGroup?,
+//        savedInstanceState: Bundle?
+//    ): View? {
+//
+//        // TOD для байндинга тоже давно придумали делегаты, уже готовые даже есть чтобы
+//        //  самому не писать с помощью kotlin delegated property - com.github.kirich1409:viewbindingpropertydelegate-noreflection
+////        _binding = FragmentTasksBinding.inflate(inflater, container, false)
+////        val view = viewBinding.root
+//
+//        // TOD грубо говоря сам попытался сделать без DI все, поэтому все так страшно)))
+////        val application = requireNotNull(this.activity).application
+////        val dao = TaskDatabase.getInstance(application).taskDao
+////        val viewModelFactory = TaskViewModelFactory(dao)
+////        val viewModel = ViewModelProvider(this, viewModelFactory).get(TasksViewModel::class.java)
+//        return view
+//    }
 
-        // TOD тут даже студия кричит - отформатируй код, и зачем тут let))) -
-        //  viewModel.tasks.observe(viewLifecycleOwner) { adapter.submitList(it) }
+    // TOD вообще всю эту обработку (кроме двух строчек с байндингом) лучше делать в onViewCreated,
+    //  когда вьюшка уже создана
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        viewBinding.tasksList.adapter = adapter
+
         viewModel.tasks.observe(viewLifecycleOwner, Observer {
-            adapter.submitList(it)
+            adapter?.submitList(it)
         })
 
-        binding.saveButton.setOnClickListener {
-            // TODO слишком много логики тут, должен просто вызвать
+        viewBinding.saveButton.setOnClickListener {
+            // TOD слишком много логики тут, должен просто вызвать
             //  viewModel.saveButtonClicked(newTaskName), дальше все на liveData/observable
-//            viewModel.newTaskName =
-//                if (binding.taskName.text.isEmpty()) "Default Name" else binding.taskName.text.toString()
-            viewModel.addTask(if (binding.taskName.text.isEmpty()) "Default Name" else binding.taskName.text.toString())
-            binding.taskName.text = null
+            viewModel.addTask(viewBinding.taskName.text.toString())
+            viewBinding.taskName.text = null
         }
 
-        // TODO опять же, отформатируй код, и зачем тут снова let))) -
-        //  viewModel.tasks.observe(viewLifecycleOwner) { adapter.submitList(it) }
         viewModel.navigateToTask.observe(viewLifecycleOwner, Observer {
             val action = TasksFragmentDirections.actionTasksFragmentToEditTaskFragment(it)
-            view.findNavController().navigate(action)
-//                viewModel.onTaskNavigated()
+            viewBinding.root.findNavController().navigate(action)
         })
-
-        return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
+//    override fun onDestroyView() {
+//        super.onDestroyView()
+////        _binding = null
+//    }
 }
