@@ -9,7 +9,7 @@ class TaskViewModelFactory(
     context: Context
 ) : ViewModelProvider.Factory {
 
-    private val database = TaskDatabase.getInstance(context.applicationContext)
+    private val database = TaskDatabase.getDatabase(context.applicationContext)
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(TasksViewModel::class.java)) {

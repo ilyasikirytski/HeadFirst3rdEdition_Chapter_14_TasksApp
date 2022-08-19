@@ -20,6 +20,7 @@ class EditTaskFragment : Fragment(R.layout.fragment_edit_task) {
     }
     private val viewModel: EditTaskViewModel by viewModels(factoryProducer = factoryProducer)
     private val viewBinding by viewBinding(FragmentEditTaskBinding::bind)
+    lateinit var taskId: EditTaskFragmentArgs
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,14 +40,20 @@ class EditTaskFragment : Fragment(R.layout.fragment_edit_task) {
             viewModel.deleteTask()
         }
 
-        viewModel.task?.observe(viewLifecycleOwner, Observer {
-            viewBinding.taskName.setText(viewModel.task!!.value?.taskName)
-            it?.let { viewBinding.taskDone.isChecked = it.taskDone }
+        viewModel.load(taskId).observe(viewLifecycleOwner, Observer {
+            viewBinding.taskName.setText(viewModel.setText(savedInstanceState?.getString("text")))
+            viewBinding.taskDone.isChecked = viewModel.setIsChecked(savedInstanceState?.getBoolean("checkbox"))
         })
 
         viewModel.navigateToList.observe(viewLifecycleOwner, Observer {
             viewBinding.root.findNavController()
                 .navigate(R.id.action_editTaskFragment_to_tasksFragment)
         })
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString("text", viewBinding.taskName.text.toString())
+        outState.putBoolean("checkbox", viewBinding.taskDone.isChecked)
     }
 }
