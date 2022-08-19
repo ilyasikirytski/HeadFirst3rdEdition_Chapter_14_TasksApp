@@ -6,13 +6,10 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.chapter_14_tasksapp.data.TaskEntity
 import com.example.chapter_14_tasksapp.databinding.TaskItemBinding
-import com.example.chapter_14_tasksapp.view_model.TaskDiffItemCallback
-import kotlin.reflect.KFunction1
 
-typealias OnTaskClicked = (taskId: Long?) -> Unit
+typealias OnTaskClicked = (taskId: Long) -> Unit
 
-// TOD это вьюшка же, адаптер это часть отображения, поэтому лежит всегда в пакете view
-class TaskItemAdapter(private val clickListener: KFunction1<Long, Unit>) :
+class TaskItemAdapter(private val clickListener: OnTaskClicked) :
     ListAdapter<TaskEntity, TaskItemAdapter.TaskItemViewHolder>(TaskDiffItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TaskItemViewHolder =
@@ -24,11 +21,10 @@ class TaskItemAdapter(private val clickListener: KFunction1<Long, Unit>) :
     }
 
     class TaskItemViewHolder(
-        var binding: TaskItemBinding
+        private var binding: TaskItemBinding
     ) : RecyclerView.ViewHolder(binding.root) {
 
-        // TOD дублирование `(taskId: Long) -> Unit`, лучше использовать typealias
-        fun bind(item: TaskEntity, clickListener: KFunction1<Long, Unit>) {
+        fun bind(item: TaskEntity, clickListener: OnTaskClicked) {
             binding.taskName.text = item.taskName
             binding.taskDone.isChecked = item.taskDone
             binding.root.setOnClickListener {

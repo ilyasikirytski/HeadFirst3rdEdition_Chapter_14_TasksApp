@@ -1,6 +1,4 @@
-package com.example.chapter_14_tasksapp.view_model
-// TODO DiffUtil.ItemCallback это же часть recycler view, то есть это view слой, такое обычно
-//  ложат рядом с вьюшкой/адаптером (переместить в другой пакет)
+package com.example.chapter_14_tasksapp.view
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.chapter_14_tasksapp.data.TaskEntity
