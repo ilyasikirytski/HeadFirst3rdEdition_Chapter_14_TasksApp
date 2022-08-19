@@ -1,5 +1,9 @@
 <resources>
-    <string name="app_name">Chapter_14_TasksApp</string>
+    <string name="app_name">My Tasks</string>
+    <string name="enter_you_task_name_or_change_it">Enter you task name or change it</string>
+    <string name="update_task">Update task</string>
+    <string name="delete_task">Delete task</string>
+    <string name="enter_a_task_name">Enter a task name</string>
+    <string name="save_task">Save task</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

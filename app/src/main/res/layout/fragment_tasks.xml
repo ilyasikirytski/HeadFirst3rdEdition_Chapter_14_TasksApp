@@ -12,27 +12,28 @@
         android:id="@+id/task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter a task name"
-        android:inputType="text" />
+        android:hint="@string/enter_a_task_name"
+        android:inputType="text"
+        android:textColorHint="#757575"
+        android:autofillHints="" />
 
     <Button
         android:id="@+id/save_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Save task" />
+        android:text="@string/save_task" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tasks_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top"
+        android:layout_height="0dp"
         android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:spanCount="2" />
 <!--
-TODO
- - а зачем тут layout_gravity?
+TOD
+ - а зачем тут layout_gravity? gravity был в книге.
  - и если ставишь у детей Linear атрибут layout_weight, то ожидается что height/weight будет = 0,
    чтобы он автоматически расширился на всю длину экрана, а иначе замен он? (почиатй про layout_weight)
 -->

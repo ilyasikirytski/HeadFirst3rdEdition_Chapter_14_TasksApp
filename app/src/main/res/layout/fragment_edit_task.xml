@@ -12,8 +12,12 @@
         android:id="@+id/task_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:hint="@string/enter_you_task_name_or_change_it"
         android:inputType="text"
-        android:textSize="16sp" />
+        android:minHeight="48dp"
+        android:textColorHint="#757575"
+        android:textSize="16sp"
+        android:autofillHints="" />
     <!-- TOD это тут пытался убрать DataBinding но забыл тут text="" ? -->
 
     <CheckBox
@@ -27,13 +31,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Update task" />
+        android:text="@string/update_task" />
 
     <Button
         android:id="@+id/delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="Delete task" />
+        android:text="@string/delete_task" />
 
 </LinearLayout>
